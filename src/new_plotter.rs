@@ -1,48 +1,49 @@
+use crate::config_reader::Config;
+use crate::config_reader::get_name;
 use anyhow::Result;
 use opener::open;
 use plotters::prelude::*;
-use rand::Rng;
-use std::path::Path;
 
-pub fn graphit(timepl: Vec<(f64, f64)>, optype: &str) -> Result<()> {
+pub fn graphit(timepl: Vec<(f64, f64)>, optype: &str, config: Config) -> Result<()> {
     // Infer axis ranges from data
-    let (x_min, x_max) = timepl
+    let x_max = timepl
         .iter()
         .map(|(x, _)| *x)
-        .fold((f64::MAX, f64::MIN), |(min, max), val| {
-            (min.min(val), max.max(val))
-        });
+        .fold(0.0f64, |max, val| max.max(val));
 
-    let (y_min, y_max) = timepl
+    let y_max = timepl
         .iter()
         .map(|(_, y)| *y)
-        .fold((f64::MAX, f64::MIN), |(min, max), val| {
-            (min.min(val), max.max(val))
-        });
+        .fold(0.0f64, |max, val| max.max(val));
 
-    let file_path = Path::new("Graph.png");
-    let mut title = String::from("Graph");
-    if file_path.exists() {
-        let mut randoms = rand::rng();
-        let rndint: u16 = randoms.random_range(0..1000);
-        println!("{}", rndint);
-        title.push_str(rndint.to_string().as_str());
-        title.push_str(".png");
-        println!("{}", title)
+    let mut filename = if config.filename.to_lowercase() == "default"
+        || config.filename.to_lowercase() == "none"
+    {
+        get_name()?
     } else {
-        title.push_str(".png");
-        println!("{}", title);
+        config.filename.clone()
+    };
+
+    if !filename.to_lowercase().ends_with(".png") {
+        filename.push_str(".png");
     }
 
-    let root = BitMapBackend::new(&title, (640, 480)).into_drawing_area();
+    let root = BitMapBackend::new(&filename, (config.width, config.height)).into_drawing_area();
     root.fill(&WHITE)?;
 
     let mut chart = ChartBuilder::on(&root)
-        .caption(format!("{} over time", optype), ("sans-serif", 30))
+        .caption(
+            format!("{} over time", optype),
+            (
+                config.captionfontfamily.as_str(),
+                config.captionfontsize,
+                &config.captioncolor,
+            ),
+        )
         .margin(10)
         .x_label_area_size(40)
         .y_label_area_size(40)
-        .build_cartesian_2d(x_min..x_max, y_min..y_max + 1 as f64)?;
+        .build_cartesian_2d(0 as f64..x_max, 0 as f64..y_max + 1 as f64)?;
 
     chart
         .configure_mesh()
@@ -54,8 +55,9 @@ pub fn graphit(timepl: Vec<(f64, f64)>, optype: &str) -> Result<()> {
         })
         .draw()?;
 
-    chart.draw_series(LineSeries::new(timepl, &RED))?;
-    open(&title)?;
+    chart.draw_series(LineSeries::new(timepl, &config.linecolor))?;
+    root.present()?;
+    open(&filename)?;
 
     Ok(())
 }

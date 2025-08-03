@@ -2,8 +2,6 @@ use anyhow::Result;
 use std::fs::File;
 use std::io::{self, BufRead};
 
-//Struct for parsing desired data
-
 pub struct Params {
     pub time: u128,
     pub ping: u16,
@@ -11,7 +9,7 @@ pub struct Params {
 }
 
 pub fn get_param_vec(target: &str) -> Result<Vec<Params>> {
-    let file = File::open(target)?; //Open file
+    let file = File::open(target)?;
     let reader = io::BufReader::new(file); //Wrap in BufReader
 
     let mut params_vec: Vec<Params> = Vec::new(); //Create Vec of custom struct to store
@@ -29,7 +27,7 @@ pub fn get_param_vec(target: &str) -> Result<Vec<Params>> {
                 ping: fields[8].parse::<u16>()?, //Parse it into the data type the Struct demands
                 loss: fields[6].parse::<u8>()?,
             };
-            params_vec.push(new); 
+            params_vec.push(new); //
         } else {
             println!("Skipping invalid line: {}", line); //Handle irregularities
         }
@@ -51,7 +49,7 @@ pub fn get_timeloss(param: &Vec<Params>) -> Result<Vec<(f64, f64)>> {
     let mut get_timeloss: Vec<(f64, f64)> = Vec::new(); //Same as above
     for entry in param.iter() {
         let x: f64 = entry.time as f64 / 1000 as f64 / 60 as f64;
-        get_timeloss.push((x, entry.loss as f64)); 
+        get_timeloss.push((x, entry.loss as f64)); //Push a tuple of Param.time and Param.loss as f64 into tuple Vec above
     }
     Ok(get_timeloss)
 }
