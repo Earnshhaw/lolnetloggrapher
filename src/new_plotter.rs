@@ -40,9 +40,9 @@ pub fn graphit(timepl: Vec<(f64, f64)>, optype: &str, config: Config) -> Result<
                 &config.captioncolor,
             ),
         )
-        .margin(10)
-        .x_label_area_size(40)
-        .y_label_area_size(40)
+        .margin(config.captionfontsize)
+        .x_label_area_size(config.captionfontsize as f64 * 3 as f64)
+        .y_label_area_size(config.captionfontsize as f64 * 3 as f64)
         .build_cartesian_2d(0 as f64..x_max, 0 as f64..y_max + 1 as f64)?;
 
     chart
@@ -53,6 +53,10 @@ pub fn graphit(timepl: Vec<(f64, f64)>, optype: &str, config: Config) -> Result<
             "Loss" => "Loss (%)",
             _ => "Value",
         })
+        .label_style((
+            config.captionfontfamily.as_str(),
+            config.captionfontsize as f64,
+        ))
         .draw()?;
 
     chart.draw_series(LineSeries::new(timepl, &config.linecolor))?;
