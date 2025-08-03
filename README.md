@@ -1,10 +1,10 @@
-# 📊 NetlogGrapher
+#  NetlogGrapher
 
 **NetlogGrapher** is a lightweight utility that generates graphs showing **ping over time** and/or **packet loss over time** from a League of Legends netlog (`.txt`) file.
 
 ---
 
-## ⚙️ How to Use
+## ⚙️ Usage
 
 1. **Place the executable**  
    Put the `.exe` file in the same folder as the netlog file you want to graph.
