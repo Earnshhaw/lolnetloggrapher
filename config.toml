@@ -1,0 +1,7 @@
+width = 800
+height = 800
+filename = "default"
+captioncolor = [100, 100, 100] #RGB 0-255
+captionfontfamily = "serif"
+captionsize = 40
+linecolor = [255, 0, 0]        #RGB 0-255
