@@ -2,7 +2,6 @@ use anyhow::Result;
 use opener::open;
 use plotters::prelude::*;
 use rand::Rng;
-//use std::env;
 use std::path::Path;
 
 pub fn graphit(timepl: Vec<(f64, f64)>, optype: &str) -> Result<()> {
