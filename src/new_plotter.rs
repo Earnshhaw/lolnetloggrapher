@@ -21,11 +21,6 @@ pub fn graphit(timepl: Vec<(f64, f64)>, optype: &str) -> Result<()> {
             (min.min(val), max.max(val))
         });
 
-    //let exe_dir = env::current_exe()
-    //.ok()
-    //.and_then(|p| p.parent().map(|p| p.to_path_buf()))
-    //.expect("Failed to determine executable directory");
-    //let file_path = exe_dir.join("Graph.png");
     let file_path = Path::new("Graph.png");
     let mut title = String::from("Graph");
     if file_path.exists() {
