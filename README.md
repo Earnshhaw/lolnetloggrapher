@@ -14,7 +14,7 @@
 3. **When prompted**, enter the name of the log file(name.txt)
 
 
-4. 📈 **Output**  
+4. **Output**  
 A `.png` graph will be created in the **same directory**.
 
 ---
