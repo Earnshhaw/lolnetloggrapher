@@ -29,11 +29,11 @@ fn main() -> Result<()> {
     //Match Ping and Loss to function calls or call an exception
     if ex.to_lowercase() == "p" {
         let tmpng = get_timeping(&paramms)?;
-        //visualize(tmpng, "#35C788", "Ping")?;
+        
         graphit(tmpng, "Ping")?;
     } else if ex.to_lowercase() == "l" {
         let lstm = get_timeloss(&paramms)?;
-        //visualize(lstm, "#DD3355", "Loss")?;
+    
         graphit(lstm, "Loss")?;
     } else {
         println!("Invalid operation type");
